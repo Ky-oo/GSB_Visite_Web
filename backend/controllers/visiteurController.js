@@ -59,4 +59,3 @@ exports.createVisiteur = expressAsyncHandler(async (req, res) => {
   await visiteur.save();
   res.status(201).json({ message: 'Visiteur enregistré avec succès !', visiteur_id: visiteur._id });
 });
-// ...

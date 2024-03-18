@@ -6,7 +6,8 @@ const visiteurSchema = mongoose.Schema({
   tel: { type: String, required: true },
   email: { type: String, required: true },
   date_embauche: { type: Date, required: true },
-  visites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Visite' }]
+  visites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Visite' }],
+  password: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Visiteur', visiteurSchema);
