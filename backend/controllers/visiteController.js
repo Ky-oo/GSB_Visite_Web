@@ -23,6 +23,15 @@ exports.getOneVisite = expressAsyncHandler(async (req, res) => {
     res.status(200).json(visite);
 });
 
+exports.getOneVisiteByPraticien = expressAsyncHandler(async (req, res) => {
+    const visite = await Visite.find({ praticien: req.params.id });
+    if (!visite) {
+        res.status(404).json({ message: 'Visite not found' });
+        return;
+    }
+    res.status(200).json(visite);
+});
+
 exports.modifyVisite = expressAsyncHandler(async (req, res) => {
     const visite = new Visite({
         _id: req.params.id,
