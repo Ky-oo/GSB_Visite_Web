@@ -10,9 +10,24 @@ exports.createVisite = expressAsyncHandler(async (req, res) => {
         motif: req.body.motif
     });
 
+    try {
     await visite.save();
-    res.status(201).json({ message: 'Visite saved successfully!', visite_id: visite._id });
-});
+    await praticien.findBy({ _id: req.body.praticien }, (err, praticien) => {
+        praticien.push(visite._id);
+    });
+    await visiteur.findBy({ _id: req.body.visiteur }, (err, visiteur) => {
+        visiteur.push(visite._id);
+    });
+    await motif.findBy({ _id: req.body.motif }, (err, motif) => {
+        motif.push(visite._id);
+    });
+    }
+    catch (error) {
+        res.status(400).json({ error });
+        return;
+    }
+}
+);
 
 exports.getOneVisite = expressAsyncHandler(async (req, res) => {
     const visite = await Visite.findOne({ _id: req.params.id });
