@@ -3,7 +3,7 @@ const expressAsyncHandler = require('express-async-handler');
 const { body , validationResult } = require('express-validator');
 
 exports.getOneVisiteur = expressAsyncHandler(async (req, res) => {
-  const visiteur = await Visiteur.findOne({ _id: req.params.id });
+  const visiteur = await Visiteur.findOne({ _id: req.params.id }).populate('visites').populate('porteFeuillePraticiens').exec();
   if (!visiteur) {
     res.status(404).json({ message: 'Visiteur non trouvé' });
     return;
@@ -39,7 +39,6 @@ exports.getAllVisiteurs = expressAsyncHandler(async (req, res) => {
 // ...
 
 exports.createVisiteur = expressAsyncHandler(async (req, res) => {
-  // Ajoutez la validation pour l'email
   await body('email').isEmail().withMessage('L\'email doit être au format approprié').run(req);
 
   const errors = validationResult(req);
@@ -58,4 +57,21 @@ exports.createVisiteur = expressAsyncHandler(async (req, res) => {
 
   await visiteur.save();
   res.status(201).json({ message: 'Visiteur enregistré avec succès !', visiteur_id: visiteur._id });
+});
+
+exports.addPraticienToPorteFeuille = expressAsyncHandler(async (req, res) => {
+  const visiteurId = req.params.id;
+  const praticienId = req.body.praticien_id; 
+  
+  const visiteur = await Visiteur.findById(visiteurId);
+
+  if (visiteur.porteFeuillePraticiens.includes(praticienId)) {
+    return res.status(400).json({ message: 'Ce praticien est déjà dans la liste !' });
+  }
+
+  await Visiteur.updateOne({ _id: visiteurId }, { $push: { porteFeuillePraticiens: praticienId }});
+
+  Visiteur.findById(visiteurId).populate('porteFeuillePraticiens').exec();
+
+  res.status(201).json({ message: 'Praticien ajouté avec succès !'});
 });
