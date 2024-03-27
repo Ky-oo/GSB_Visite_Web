@@ -30,7 +30,7 @@ exports.createVisite = expressAsyncHandler(async (req, res) => {
 );
 
 exports.getOneVisite = expressAsyncHandler(async (req, res) => {
-    const visite = await Visite.findOne({ _id: req.params.id });
+    const visite = await Visite.findOne({ _id: req.params.id }).populate('visiteur').populate('praticien').populate('motif');
     if (!visite) {
         res.status(404).json({ message: 'Visite not found' });
         return;
