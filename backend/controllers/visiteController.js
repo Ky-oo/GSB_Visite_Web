@@ -11,16 +11,16 @@ exports.createVisite = expressAsyncHandler(async (req, res) => {
     });
 
     try {
-    await visite.save();
-    await praticien.findBy({ _id: req.body.praticien }, (err, praticien) => {
-        praticien.push(visite._id);
-    });
-    await visiteur.findBy({ _id: req.body.visiteur }, (err, visiteur) => {
-        visiteur.push(visite._id);
-    });
-    await motif.findBy({ _id: req.body.motif }, (err, motif) => {
-        motif.push(visite._id);
-    });
+        await visite.save();
+        await praticien.findByAndUpdated({ _id: req.body.praticien }, (err, praticien) => {
+            $push: { visites: visite._id }}, {new: true, useFindAndModify: false
+        });
+
+        await visiteur.findByAndUpdated({ _id: req.body.visiteur }, (err, visiteur) => {
+            $push: { visites: visite._id }}, {new: true, useFindAndModify: false
+        });
+
+        res.status(201).json({ message: 'Visite created successfully!'});
     }
     catch (error) {
         res.status(400).json({ error });
@@ -67,6 +67,6 @@ exports.deleteVisite = expressAsyncHandler(async (req, res) => {
 });
 
 exports.getAllVisites = expressAsyncHandler(async (req, res) => {
-    const visites = await Visite.find();
+    const visites = await Visite.find().populate('visiteur').populate('praticien').populate('motif');
     res.status(200).json(visites);
 });
