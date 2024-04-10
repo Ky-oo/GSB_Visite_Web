@@ -36,8 +36,6 @@ exports.getAllVisiteurs = expressAsyncHandler(async (req, res) => {
   res.status(200).json(visiteurs);
 });
 
-// ...
-
 exports.createVisiteur = expressAsyncHandler(async (req, res) => {
   await body('email').isEmail().withMessage('L\'email doit être au format approprié').run(req);
 
