@@ -52,7 +52,7 @@ exports.getOneVisite = expressAsyncHandler(async (req, res) => {
 });
 
 exports.getOneVisiteByPraticien = expressAsyncHandler(async (req, res) => {
-    const visite = await Visite.find({ praticien: req.params.id });
+    const visite = await Visite.find({ praticien: req.params.id }).populate('motif').populate('visiteur').populate('praticien').exec();
     if (!visite) {
         res.status(404).json({ message: 'Visite not found' });
         return;
@@ -80,6 +80,6 @@ exports.deleteVisite = expressAsyncHandler(async (req, res) => {
 });
 
 exports.getAllVisites = expressAsyncHandler(async (req, res) => {
-    const visites = await Visite.find().populate('visiteur').populate('praticien').populate('motif');
+    const visites = await Visite.find().populate('visiteur').populate('praticien').populate('motif').exec();
     res.status(200).json(visites);
 });
