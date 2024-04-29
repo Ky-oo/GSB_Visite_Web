@@ -8,14 +8,21 @@ const e = require('express');
 exports.createVisite = expressAsyncHandler(async (req, res) => {
     console.log(req.body);
 
+    let motif = await Motif.findOne({libelle: req.body.motif});
+    if(!motif) {
+        motif = new Motif({
+            libelle: req.body.motif
+        });
+        await motif.save();
+    }
+
     const visite = new Visite({
         date_visite: new Date(req.body.date_visite),
         commentaire: req.body.commentaire,
         visiteur: req.body.visiteur,
         praticien: req.body.praticien,
-        motif: req.body.motif
+        motif: motif._id
     });
-    console.log(visite);
     try {
         await visite.save();
         await Praticien.findOneAndUpdate({ _id: req.body.praticien }, {

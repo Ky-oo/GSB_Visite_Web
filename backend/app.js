@@ -2,7 +2,6 @@ const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 
-const stuffRoutes = require('./routes/stuff');
 const motifRoutes = require('./routes/motif');
 const praticienRoutes = require('./routes/praticien');
 const visiteRoutes = require('./routes/visite');
@@ -26,7 +25,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/stuff', jwt, stuffRoutes);
 app.use('/api/motif', jwt, motifRoutes);
 app.use('/api/praticien', jwt, praticienRoutes);
 app.use('/api/visite', jwt, visiteRoutes);
