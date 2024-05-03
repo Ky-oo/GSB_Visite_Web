@@ -19,7 +19,8 @@ exports.modifyVisiteur = expressAsyncHandler(async (req, res) => {
     tel: req.body.tel,
     email: req.body.email,
     date_embauche: req.body.date_embauche,
-    visites: req.body.visites
+    visites: req.body.visites,
+    resposable: req.body.resposable
   });
 
   await Visiteur.updateOne({ _id: req.params.id }, visiteur);
@@ -50,7 +51,8 @@ exports.createVisiteur = expressAsyncHandler(async (req, res) => {
     tel: req.body.tel,
     email: req.body.email,
     date_embauche: req.body.date_embauche,
-    visites: req.body.visites
+    visites: req.body.visites,
+    resposable: false
   });
 
   await visiteur.save();

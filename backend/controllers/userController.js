@@ -35,6 +35,7 @@ exports.signup = [
             tel: req.body.tel,
             date_embauche: req.body.date_embauche,
             visite: req.body.visite,
+            Responsable: req.body.Responsable
         });
         await user.save();
         res.status(201).json({ message: 'Utilisateur créé !', userId: user._id, email: user.email});
@@ -56,8 +57,10 @@ exports.login = asyncHandler(async (req, res, next) => {
     }
     res.status(200).json({
         userId: user._id,
+        Responsable: user.Responsable,
         token: jwt.sign(
             { userId: user._id },
+            { Responsable: user.Responsable},
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         )

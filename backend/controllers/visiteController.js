@@ -4,6 +4,7 @@ const Visiteur = require('../models/visiteur');
 const Motif = require('../models/motif');
 const expressAsyncHandler = require('express-async-handler');
 const e = require('express');
+const echantillon = require('../models/echantillon');
 
 exports.createVisite = expressAsyncHandler(async (req, res) => {
     console.log(req.body);
@@ -82,4 +83,19 @@ exports.deleteVisite = expressAsyncHandler(async (req, res) => {
 exports.getAllVisites = expressAsyncHandler(async (req, res) => {
     const visites = await Visite.find().populate('visiteur').populate('praticien').populate('motif').exec();
     res.status(200).json(visites);
+});
+
+exports.addEchantillonToVisite = expressAsyncHandler(async (req, res) => {
+    const visiteId = req.params.id;
+    const echantillonid = req.body.echantillonid;
+    console.log(visiteId + ' ' + echantillonid);
+    await Visite.findOneAndUpdate({ _id: visiteId }, {
+        $push: { echantillons: echantillonid }
+    }, {new: true, useFindAndModify: false});
+
+    await echantillon.findOneAndUpdate({ _id: echantillonid }, {
+        visite: visiteId
+    }, {new: true, useFindAndModify: false}
+    )
+    res.status(200).json({ message: 'Echantillon added to visite successfully!' });
 });

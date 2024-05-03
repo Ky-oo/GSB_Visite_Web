@@ -10,5 +10,6 @@ router.get('/:id', visiteCtrl.getOneVisite);
 router.get('/praticien/:id', visiteCtrl.getOneVisiteByPraticien);
 router.put('/:id', visiteCtrl.modifyVisite);
 router.delete('/:id', visiteCtrl.deleteVisite);
+router.post('/addEchantillon/:id', visiteCtrl.addEchantillonToVisite);
 
 module.exports = router;

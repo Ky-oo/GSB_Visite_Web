@@ -8,6 +8,7 @@ const visiteRoutes = require('./routes/visite');
 const visiteurRoutes = require('./routes/visiteur');
 const userRoutes = require('./routes/user');
 const jwt = require('./middleware/auth');
+const echantillonRoutes = require('./routes/echantillon');
 
 const app = express();
 
@@ -30,6 +31,6 @@ app.use('/api/praticien', jwt, praticienRoutes);
 app.use('/api/visite', jwt, visiteRoutes);
 app.use('/api/visiteur',jwt,  visiteurRoutes);
 app.use('/api/auth',  userRoutes);
-
+app.use('/api/echantillon', jwt, echantillonRoutes);
 
 module.exports = app;
